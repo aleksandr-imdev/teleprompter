@@ -1,0 +1,143 @@
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 720px;
+}
+
+body {
+    background-color: bisque;
+}
+
+#settings {
+    margin-top: 6vh;
+    border-radius: 20px;
+    width: 50%;
+    height: 40%;
+    min-height: 288px;
+    min-width: 540px;
+    max-height: 864px;
+    max-width: 1920px;
+    resize: vertical;
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    margin-inline: auto;
+}
+
+#final {
+    margin-top: 4vh;
+    border-radius: 20px;
+    width: 80%;
+    height: 30vh;
+    min-width: 864px;
+    min-height: 288px;
+    max-width: 1920px;
+    background-color: aliceblue;
+    margin-inline: auto;
+}
+
+#error {
+    background-color: #ff9494;
+    position: fixed;
+    width: 100%;
+    min-height: 10%;
+    max-height: 30%;
+    overflow-y: scroll;
+    z-index: 3;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+}
+
+#buttons {
+    position: fixed;
+    height: 20%;
+    bottom: 0;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    display: flex;
+    z-index: 2;
+    min-width: 700px;
+    min-height: 144px;
+}
+
+#settings #text{
+    width: 85%;
+    height: 70%;
+    margin-top: 3%;
+    margin-inline: auto;
+    resize: none;
+    font-size: 17px;
+    box-shadow: 0 0 3px 0px purple;
+}
+
+#settings #speed {
+    margin-top: 5%;
+    margin-bottom: -1%;
+    width: 60%;
+    height: 20px;
+    margin-inline: auto;
+    outline: none;
+    -webkit-appearance: none;
+    background-color: lightgray;
+    border-radius: 10px;
+}
+
+#error h1 {
+    font-size: 20px;
+    font-family: sans-serif;
+    color: white;
+    font-weight: 500;
+}
+
+.range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: green;
+    cursor: pointer;
+}
+
+#speedValue {
+    margin-inline: auto;
+    font-size: 30px;
+    height: 5%;
+    z-index: 1;
+    font-family:sans-serif;
+}
+
+.btn {
+    width: 15%;
+    height: 50%;
+    border-radius: 20px;
+    border: none;
+    font-size: x-large;
+    min-width: 108px;
+}
+.btn:hover {
+    cursor: pointer;
+    box-shadow: 0 0 3px 0px purple;
+}
+
+#play {
+    background-color: lightgreen;
+}
+#stop {
+    background-color: lightcoral;
+}
+
+#copyright {
+    left: 7%;
+    bottom: 0;
+    position: absolute;
+}
+
+.canvas {
+    font-kerning: none;
+    text-rendering: optimizeLegibility;
+}
