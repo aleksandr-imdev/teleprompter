@@ -11,6 +11,7 @@ function setBaseText()
     sentences.forEach(element => {
         element = element.replace(/^\s+/g, ' ').trim();
     });
+    sentences = sentences.filter(e => e);
     console.log(sentences);
 
     var slider = document.getElementById("speed");
@@ -99,42 +100,65 @@ function Play()
         if (sentences[index] != undefined) element.fillText(sentences[index], canvas[0].width * 0.02, canvas[0].height / 2, maxWidth);
     });
 
-    var index = 0;
+    let progressBar = 0;
+    let progress = setInterval(() => {
+        if (progressBar == 100) clearInterval(progress);
+        ctx[0].fillRect(0, canvas[0].height * 0.98, ctx[0].measureText(sentences[0]).width / 100 * progressBar, canvas[0].height * 0.02);
+        progressBar++;
+    }, displayTime[0] / 100 * 1000);
+    delete progressBar;
+    delete progress;
+    console.log(sentences);
+
+    var index = 1;
     var timer = setTimeout(function func() {
-        if (isPlaying == false) return;
-
-        if (index % 3 == 0) {
-            ctx.forEach((element, i) => {
-                element.font = "20px Tahoma";
-                element.fillStyle = "darkgrey";
-                element.clearRect(0, 0, canvas[i].width, canvas[i].height);
-                if (sentences[index + i] != undefined) element.fillText(sentences[index + i], canvas[0].width * 0.02, canvas[0].height / 2, maxWidth);
-            });
-        }
-
-        ctx[index % 3].font = "22px Tahoma";
-        ctx[index % 3].fillStyle = "black";
-        ctx[index % 3].clearRect(0, 0, canvas[0].width, canvas[0].height);
-        if (sentences[index] != undefined) ctx[index % 3].fillText(sentences[index], canvas[0].width * 0.02, canvas[0].height / 2, maxWidth);
-
-        if (index >= 1 && index % 3 != 0) {
-            ctx[(index - 1) % 3].clearRect(0, 0, canvas[0].width, canvas[0].height);
-            ctx[(index - 1) % 3].fillStyle = "darkgrey";
-            ctx[(index - 1) % 3].font = "20px Tahoma";
-            ctx[(index - 1) % 3].fillText(sentences[index - 1], canvas[0].width * 0.02, canvas[0].height / 2, maxWidth);
-            ctx[(index - 1) % 3].clearRect(0, canvas[0].height * 0.98, canvas[0].width, canvas[0].height);
-        }
-
-        if (sentences.length == index) {
-            ctx.forEach(element => {
-                element.font = "20px Tahoma";
-                element.fillStyle = "darkgrey";
-                element.clearRect(0, 0, canvas[0].width, canvas[0].height);
-                ctx[0].font == "22px Tahoma";
-            });
-            isPlaying = false;
+        if (isPlaying == false) {
+            clearInterval(progress);
             return;
-        };
+        }
+
+        if (index != 0) {
+            if (index % 3 == 0) {
+                ctx.forEach((element, i) => {
+                    element.font = "20px Tahoma";
+                    element.fillStyle = "darkgrey";
+                    element.clearRect(0, 0, canvas[i].width, canvas[i].height);
+                    if (sentences[index + i] != undefined) element.fillText(sentences[index + i], canvas[0].width * 0.02, canvas[0].height / 2, maxWidth);
+                });
+            }
+
+            ctx[index % 3].font = "22px Tahoma";
+            ctx[index % 3].fillStyle = "black";
+            ctx[index % 3].clearRect(0, 0, canvas[0].width, canvas[0].height);
+            if (sentences[index] != undefined) ctx[index % 3].fillText(sentences[index], canvas[0].width * 0.02, canvas[0].height / 2, maxWidth);
+
+            if (index >= 1 && index % 3 != 0) {
+                ctx[(index - 1) % 3].clearRect(0, 0, canvas[0].width, canvas[0].height);
+                ctx[(index - 1) % 3].fillStyle = "darkgrey";
+                ctx[(index - 1) % 3].font = "20px Tahoma";
+                ctx[(index - 1) % 3].fillText(sentences[index - 1], canvas[0].width * 0.02, canvas[0].height / 2, maxWidth);
+                ctx[(index - 1) % 3].clearRect(0, canvas[0].height * 0.98, canvas[0].width, canvas[0].height);
+            }
+
+            let progressBar = 0;
+            let progress = setInterval(() => {
+                console.log(ctx[(index -1) % 3].measureText(sentences[index]));
+                if (progressBar == 100) {clearInterval(progress); delete progressBar;}
+                ctx[(index - 1) % 3].fillRect(0, canvas[0].height * 0.98, ctx[0].measureText(sentences[index]).width / 100 * progressBar, canvas[0].height * 0.02);
+                progressBar++;
+            }, displayTime[index] / 100 * 1000);
+
+            if (sentences.length == index) {
+                ctx.forEach(element => {
+                    element.font = "20px Tahoma";
+                    element.fillStyle = "darkgrey";
+                    element.clearRect(0, 0, canvas[0].width, canvas[0].height);
+                    ctx[0].font == "22px Tahoma";
+                });
+                isPlaying = false;
+                return;
+            };
+        }
 
         setTimeout(func, displayTime[index] * 1000);
         index++;

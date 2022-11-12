@@ -10,7 +10,7 @@ body {
 
 #settings {
     margin-top: 6vh;
-    border-radius: 20px;
+    border-radius: 10px;
     width: 50%;
     height: 40%;
     min-height: 288px;
@@ -26,7 +26,7 @@ body {
 
 #final {
     margin-top: 4vh;
-    border-radius: 20px;
+    border-radius: 10px;
     width: 80%;
     height: 30vh;
     min-width: 864px;
