@@ -3,11 +3,10 @@ var words1s; //words every 1 sec
 var isPlaying = false;
 
 //set text in window and calculate animation time
-function setBaseText()
-{
+function setBaseText() {
     var textarea = document.getElementById("text");
 
-    sentences = textarea.value.replace(/\. +/g,'.|').replace(/\? /g,'?|').replace(/\! /g,'!|').replace(/[\n\r]/g, '|').split("|");
+    sentences = textarea.value.replace(/\. +/g, '.|').replace(/\? /g, '?|').replace(/\! /g, '!|').replace(/[\n\r]/g, '|').split("|");
     sentences.forEach(element => {
         element = element.replace(/^\s+/g, ' ').trim();
     });
@@ -18,8 +17,7 @@ function setBaseText()
     words1s = slider.value / 60;
 }
 
-function showErr(valueHtml)
-{
+function showErr(valueHtml) {
     var text = document.createElement('h1');
     var errArea = document.createElement('div');
     errArea.appendChild(text);
@@ -27,8 +25,8 @@ function showErr(valueHtml)
     errArea.id = "error";
 
     var animation = errArea.animate([
-        {opacity: '0'},
-        {opacity: '1'}
+        { opacity: '0' },
+        { opacity: '1' }
     ], 300);
     animation.addEventListener('finish', () => {
         if (animation.playbackRate == -1) {
@@ -56,8 +54,7 @@ function showErr(valueHtml)
 }
 
 //play text
-function Play()
-{
+function Play() {
     if (sentences == undefined || sentences[0] == '') {
         showErr("No text entered.");
         return;
@@ -87,29 +84,17 @@ function Play()
 
     var maxWidth = canvas[0].width * 0.96;
     var index = 0;
-    var intervals = []
-    var timeouts = []
-    var lastIsCleared = false;
 
     function func() {
-        let internalIndex = index;
-        let index3  = internalIndex % 3;
-        if(internalIndex == sentences.length || isPlaying == false){
-            lastIsCleared = true;
+        let index3 = index % 3;
+        if (index == sentences.length || isPlaying == false) {
             ctx.forEach((element, i) => {
                 element.clearRect(0, 0, canvas[i].width, canvas[i].height);
-            });
-            intervals.forEach((id)=>{
-                clearInterval(id);
-            });
-            timeouts.forEach((id)=>{
-                clearTimeout(id);
             });
             isPlaying = false;
             return;
         }
-        else if(internalIndex % 3 == 0 && internalIndex > 0){
-            lastIsCleared = true;
+        else if (index % 3 == 0 && index > 0) {
             ctx.forEach((element, i) => {
                 element.clearRect(0, 0, canvas[i].width, canvas[i].height);
             });
@@ -117,39 +102,36 @@ function Play()
         ctx[index3].font = "22px Tahoma";
         ctx[index3].fillStyle = "black";
         ctx[index3].clearRect(0, 0, canvas[index3].width, canvas[index3].height);
-        ctx[index3].fillText(sentences[internalIndex], canvas[index3].width * 0.02, canvas[index3].height / 2, maxWidth);
+        ctx[index3].fillText(sentences[index], canvas[index3].width * 0.02, canvas[index3].height / 2, maxWidth);
 
         let progressBar = 0;
-        let progress = setInterval(() => {
-            if (progressBar == 100 || isPlaying == false) {
-                clearInterval(progress);
-                if(lastIsCleared == false) {
+
+        const waiter = new Promise((resolve) => {
+            let progress = setInterval(() => {
+                if (progressBar == 100 || isPlaying == false) {
+                    clearInterval(progress);
                     ctx[index3].clearRect(0, 0, canvas[index3].width, canvas[index3].height);
                     ctx[index3].fillStyle = "darkgrey";
                     ctx[index3].font = "20px Tahoma";
-                    ctx[index3].fillText(sentences[internalIndex], canvas[index3].width * 0.02, canvas[index3].height / 2, maxWidth);
+                    ctx[index3].fillText(sentences[index], canvas[index3].width * 0.02, canvas[index3].height / 2, maxWidth);
+                    resolve();
+                    return;
                 }
-                else{
-                    lastIsCleared = false;
-                }
-                return;
-            }
-            ctx[index3].fillRect(canvas[index3].width * 0.02, canvas[index3].height * 0.98, ctx[index3].measureText(sentences[internalIndex]).width  * progressBar / 100, canvas[index3].height * 0.02);
-            progressBar++;
-        }, displayTime[internalIndex] * 10);
-        intervals.push(progress);
-        let id = setTimeout(func, displayTime[internalIndex]*1000);
-        timeouts.push(id);
-        index++;
+                ctx[index3].fillRect(canvas[index3].width * 0.02, canvas[index3].height * 0.98, ctx[index3].measureText(sentences[index]).width * progressBar / 100, canvas[index3].height * 0.02);
+                progressBar++;
+            }, displayTime[index] * 10);
+        });
+
+        waiter.then(() => {
+            index++;
+            func();
+        });
+
     };
 
+
     document.getElementById("stop").onclick = () => {
-        intervals.forEach((id)=>{
-            clearInterval(id);
-        });
-        timeouts.forEach((id)=>{
-            clearTimeout(id);
-        });
+        isPlaying = false;
         ctx.forEach((element, i) => {
             isPlaying = false;
             element.font = "20px Tahoma";
@@ -163,7 +145,7 @@ function Play()
 }
 
 //set base parameters on load
-window.onload = function() {
+window.onload = function () {
     var canvas = Array.from(document.getElementsByClassName("canvas"));
     canvas.forEach(element => {
         element.width = element.parentElement.offsetWidth;
@@ -184,7 +166,7 @@ window.onload = function() {
 }
 
 //change canvas size, when changing window size
-window.addEventListener("resize", function() {
+window.addEventListener("resize", function () {
     var canvas = Array.from(document.getElementsByClassName("canvas"));
     canvas.forEach(element => {
         element.width = element.parentElement.offsetWidth;
