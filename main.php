@@ -32,5 +32,5 @@
         <button id="stop" class="btn">Stop</button>
     </div>
 
-    <p id="copyright">Developed by "homeyadev" (sashacpp), Vector++.</p>
+    <p id="copyright">Developed by "homeyadev" (sashacpp), zankokun, Vector++.</p>
 </body>
